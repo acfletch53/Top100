@@ -18,6 +18,4 @@
 @property (nonatomic, strong) UILabel *topContributorContributionsLabel;
 @property (nonatomic, strong) UIImageView *topContributorImageView;
 
-- (void)setInfo:(RepositoryInfo *)info completionHandler:(void(^)(void))completionHandler;
-
 @end

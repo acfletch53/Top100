@@ -21,6 +21,7 @@
     // Add the navigation controller's view to the window and display.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:[[Top100TableViewController alloc] init]];
+    self.navigationController.extendedLayoutIncludesOpaqueBars = YES;
     [self.window setRootViewController:_navigationController];
     [self.window makeKeyAndVisible];
     return YES;

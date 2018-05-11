@@ -80,7 +80,6 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     RepositoryDetailView *detailView = [[RepositoryDetailView alloc] init];
     if (indexPath.row < [self.top100Repositories count])
     {
-        // Lets just... set this guy to an activity indicator until we are ready.
         [detailViewController setView:detailView];
         [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]];
         [[self navigationController] pushViewController:detailViewController animated:YES];
@@ -139,7 +138,7 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     [self getRepositoryDataWithCompletionHandler:^{
         // reload the tableView
         [self.tableView reloadData];
-        // to end the animation
+        // to end the refresh animation
         [refresh endRefreshing];
     }];
 }

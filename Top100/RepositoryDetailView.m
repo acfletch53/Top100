@@ -14,6 +14,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        self.backgroundColor = [UIColor blackColor];
+        
         _repositoryLabel = [[UILabel alloc] init];
         _repositoryLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _repositoryLabel.textColor = [UIColor whiteColor];
@@ -169,10 +171,7 @@
                                                             views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
-    //NSLayoutConstraint *topContributorHeightConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
     NSLayoutConstraint *topContributorWidthConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_topContributorImageView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-    //NSLayoutConstraint *topContributorCenterYConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-    //[NSLayoutConstraint activateConstraints:@[topContributorHeightConstraint, topContributorWidthConstraint, topContributorCenterYConstraint]];
     [NSLayoutConstraint activateConstraints:@[topContributorWidthConstraint]];
 }
 
