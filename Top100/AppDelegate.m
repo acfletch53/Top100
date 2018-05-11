@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Top100TableViewController.h"
 
 @interface AppDelegate ()
 
@@ -14,9 +15,14 @@
 
 @implementation AppDelegate
 
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     // Override point for customization after application launch.
+    // Add the navigation controller's view to the window and display.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:[[Top100TableViewController alloc] init]];
+    [self.window setRootViewController:_navigationController];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

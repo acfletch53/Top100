@@ -15,10 +15,12 @@
     if (self)
     {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.backgroundColor = [UIColor blackColor];
         
         _repositoryLabel = [[UILabel alloc] init];
         _repositoryLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _repositoryLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle1];
+        _repositoryLabel.textColor = [UIColor whiteColor];
         _repositoryLabel.adjustsFontForContentSizeCategory = YES;
         _repositoryLabel.numberOfLines = 0;
         [self.contentView addSubview:_repositoryLabel];
@@ -26,6 +28,7 @@
         _numStarsLabel = [[UILabel alloc] init];
         _numStarsLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _numStarsLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
+        _numStarsLabel.textColor = [UIColor whiteColor];
         _numStarsLabel.adjustsFontForContentSizeCategory = YES;
         [self.contentView addSubview:_numStarsLabel];
         

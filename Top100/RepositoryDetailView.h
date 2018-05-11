@@ -13,7 +13,11 @@
 
 @property (nonatomic, weak) RepositoryInfo *info;
 @property (nonatomic, strong) UILabel *repositoryLabel;
-@property (nonatomic, strong) UIImageView *topContributorImageView;
 @property (nonatomic, strong) UILabel *topContributorLabel;
+@property (nonatomic, strong) UILabel *topContributorNameLabel;
+@property (nonatomic, strong) UILabel *topContributorContributionsLabel;
+@property (nonatomic, strong) UIImageView *topContributorImageView;
+
+- (void)setInfo:(RepositoryInfo *)info completionHandler:(void(^)(void))completionHandler;
 
 @end

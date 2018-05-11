@@ -11,10 +11,10 @@
 @interface RepositoryInfo : NSObject
 
 @property NSString *repositoryName;
-@property NSURL *repositoryURL;
 @property int numStars;
-@property NSString *contributorsURL;
+@property NSString *contributorsURLString;
 @property NSString *topContributorName;
-@property NSURL *topContributorURL;
+@property int numContributions;
+@property NSURL *topContributorImageURL;
 
 @end

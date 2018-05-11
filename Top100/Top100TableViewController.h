@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Top100TableViewCell.h"
 
-// Since this is just a single-view app holding a UITableView, keep it simple
-// and make the default ViewController inherit from UITableViewController
 @interface Top100TableViewController : UITableViewController
 
 @property NSMutableArray<RepositoryInfo *> *top100Repositories;

@@ -14,11 +14,40 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _repositoryLabel = [[UILabel alloc] init];
+        _repositoryLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _repositoryLabel.textColor = [UIColor whiteColor];
+        _repositoryLabel.textAlignment = NSTextAlignmentCenter;
+        _repositoryLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleLargeTitle];
+        _repositoryLabel.adjustsFontForContentSizeCategory = YES;
+        _repositoryLabel.adjustsFontSizeToFitWidth = YES;
+        _repositoryLabel.minimumScaleFactor = 0.7;
+        [self addSubview:self.repositoryLabel];
+        
         _topContributorLabel = [[UILabel alloc] init];
         _topContributorLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _topContributorLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
+        _topContributorLabel.text = @"Top Contributor";
+        _topContributorLabel.textColor = [UIColor whiteColor];
+        _topContributorLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         _topContributorLabel.adjustsFontForContentSizeCategory = YES;
+        _topContributorLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.topContributorLabel];
+        
+        _topContributorNameLabel = [[UILabel alloc] init];
+        _topContributorNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _topContributorNameLabel.textColor = [UIColor whiteColor];
+        _topContributorNameLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        _topContributorNameLabel.adjustsFontForContentSizeCategory = YES;
+        _topContributorNameLabel.adjustsFontSizeToFitWidth = YES;
+        [self addSubview:self.topContributorNameLabel];
+        
+        _topContributorContributionsLabel = [[UILabel alloc] init];
+        _topContributorContributionsLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _topContributorContributionsLabel.textColor = [UIColor whiteColor];
+        _topContributorContributionsLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        _topContributorContributionsLabel.adjustsFontForContentSizeCategory = YES;
+        _topContributorContributionsLabel.adjustsFontSizeToFitWidth = YES;
+        [self addSubview:self.topContributorContributionsLabel];
         
         _topContributorImageView = [[UIImageView alloc] init];
         _topContributorImageView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -30,86 +59,125 @@
     return self;
 }
 
-- (void)setInfo:(RepositoryInfo *)info {
+- (void)setInfo:(RepositoryInfo *)info completionHandler:(void(^)(void))completionHandler {
     if (info != nil)
     {
         _info = info;
+        _repositoryLabel.text = info.repositoryName;
         
-        NSString *urlString = [info.contributorsURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        
-        NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data,
-                                                                                                                                       NSURLResponse *response,
-                                                                                                                                       NSError *error)
-                                      {
-                                          // Modified from https://gist.github.com/r3econ/9923319
-                                          if (error)
+        if (info.topContributorName != nil && info.topContributorImageURL != nil)
+        {
+            // This information has already been fetched, so don't bother requesting it again.
+            self.topContributorNameLabel.text = info.topContributorName;
+            self.topContributorContributionsLabel.text = [NSString stringWithFormat:@"%d Contributions", info.numContributions];
+            self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:info.topContributorImageURL]];
+            [self setNeedsLayout];
+            completionHandler();
+        }
+        else
+        {
+            NSString *urlString = [info.contributorsURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            
+            NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data,
+                                                                                                                                           NSURLResponse *response,
+                                                                                                                                           NSError *error)
                                           {
-                                              NSLog(@"Error: %@", error.localizedDescription);
-                                          }
-                                          else
-                                          {
-                                              NSError *JSONError = nil;
-                                              
-                                              NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                        options:0
-                                                                                                          error:&JSONError];
-                                              if (JSONError)
+                                              // Modified from https://gist.github.com/r3econ/9923319
+                                              if (error)
                                               {
-                                                  NSLog(@"Serialization error: %@", JSONError.localizedDescription);
+                                                  NSLog(@"Error: %@", error.localizedDescription);
                                               }
                                               else
                                               {
-                                                  NSLog(@"Response: %@", dataArray);
+                                                  NSError *JSONError = nil;
                                                   
-                                                  if ([dataArray isKindOfClass:[NSDictionary class]])
+                                                  NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                            options:0
+                                                                                                              error:&JSONError];
+                                                  if (JSONError)
                                                   {
-                                                      info.topContributorName = @"FLETCHER YOU SHOULD FIX THIS";
+                                                      NSLog(@"Serialization error: %@", JSONError.localizedDescription);
                                                   }
-                                                  else if (dataArray.count > 0)
+                                                  else
                                                   {
-                                                      NSDictionary *topContributor = [dataArray firstObject];
-                                                      info.topContributorName = [topContributor objectForKey:@"login"];
-                                                      info.topContributorURL = [topContributor objectForKey:@"html_url"];
-                                                      NSURL *topContributorImageURL = [NSURL URLWithString:[topContributor objectForKey:@"avatar_url"]];
-                                                      // TODO: Is this the best place to do this?
+                                                      NSLog(@"Response: %@", dataArray);
+                                                      
+                                                      if ([dataArray isKindOfClass:[NSDictionary class]])
+                                                      {
+                                                          // This means we got an error message regarding the list of contributors
+                                                          // being too long to get with this API call.
+                                                          info.topContributorName = @"This repository is so popular, everyone is a top contributor!";
+                                                          info.numContributions = INT_MAX;
+                                                          info.topContributorImageURL = [NSURL URLWithString:@"https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/02/13/10/oprah-winfrey.jpg"];
+                                                      }
+                                                      else if (dataArray.count > 0)
+                                                      {
+                                                          NSDictionary *topContributor = [dataArray firstObject];
+                                                          info.topContributorName = [topContributor objectForKey:@"login"];
+                                                          info.numContributions = [[topContributor objectForKey:@"contributions"] intValue];
+                                                          info.topContributorImageURL = [NSURL URLWithString:[topContributor objectForKey:@"avatar_url"]];
+                                                      }
+                                                      
                                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                                          self.topContributorLabel.text = info.topContributorName;
-                                                          self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:topContributorImageURL]];
+                                                          self.topContributorNameLabel.text = info.topContributorName;
+                                                          self.topContributorContributionsLabel.text = [NSString stringWithFormat:@"%d Contributions", info.numContributions];
+                                                          self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:info.topContributorImageURL]];
+                                                          [self setNeedsLayout];
+                                                          completionHandler();
                                                       });
                                                   }
                                               }
-                                          }
-                                      }];
-        // Start the task.
-        [task resume];
+                                          }];
+            // Start the task.
+            [task resume];
+        }
     }
 }
 
 - (void)updateConstraints {
     [super updateConstraints];
-    NSDictionary *views = NSDictionaryOfVariableBindings(_repositoryLabel, _topContributorImageView, _topContributorLabel);
+    NSDictionary *views = NSDictionaryOfVariableBindings(_repositoryLabel, _topContributorLabel, _topContributorNameLabel, _topContributorContributionsLabel, _topContributorImageView);
     NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_repositoryLabel]-|"
                                                                    options:0
                                                                    metrics:nil
                                                                      views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
-    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_topContributorImageView]-[_topContributorLabel]-|"
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_topContributorLabel]-|"
                                                           options:0
                                                           metrics:nil
                                                             views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
-    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_repositoryLabel]-[_topContributorLabel]-|"
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_topContributorNameLabel]-|"
                                                           options:0
                                                           metrics:nil
                                                             views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
-    NSLayoutConstraint *topContributorHeightConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_topContributorContributionsLabel]-|"
+                                                          options:0
+                                                          metrics:nil
+                                                            views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_topContributorImageView]-20-|"
+                                                          options:0
+                                                          metrics:nil
+                                                            views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_repositoryLabel]-[_topContributorLabel]-[_topContributorNameLabel]-[_topContributorContributionsLabel]-[_topContributorImageView]-20-|"
+                                                          options:0
+                                                          metrics:nil
+                                                            views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    //NSLayoutConstraint *topContributorHeightConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
     NSLayoutConstraint *topContributorWidthConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_topContributorImageView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-    NSLayoutConstraint *topContributorCenterYConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-    [NSLayoutConstraint activateConstraints:@[topContributorHeightConstraint, topContributorWidthConstraint, topContributorCenterYConstraint]];
+    //NSLayoutConstraint *topContributorCenterYConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    //[NSLayoutConstraint activateConstraints:@[topContributorHeightConstraint, topContributorWidthConstraint, topContributorCenterYConstraint]];
+    [NSLayoutConstraint activateConstraints:@[topContributorWidthConstraint]];
 }
 
 @end
