@@ -8,6 +8,7 @@
 
 #import "Top100TableViewController.h"
 #import "Top100TableViewCell.h"
+#import "RepositoryDetailView.h"
 
 static NSString *cellIdentifier = @"Top100";
 static NSString *top100URL = @"https://api.github.com/search/repositories?q=stars:>0&sort=stars&per_page=100";
@@ -20,6 +21,9 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // I'm a dingus and I made this a single-view app, and I hate storyboards with a passion, so i'm creating a navigation controller after the fact.
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+    
     self.tableView.estimatedRowHeight = 200;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
@@ -98,6 +102,18 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     }
 
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    UIViewController *detailViewController = [[UIViewController alloc] init];
+    RepositoryDetailView *detailView = [[RepositoryDetailView alloc] init];
+    if (indexPath.row < [self.top100Repositories count])
+    {
+        [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]];
+    }
+    [detailViewController setView:detailView];
+    [[self navigationController] pushViewController:detailViewController animated:YES];
 }
 
 @end

@@ -10,14 +10,6 @@
 
 @implementation RepositoryDetailView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self)
@@ -27,6 +19,13 @@
         _topContributorLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
         _topContributorLabel.adjustsFontForContentSizeCategory = YES;
         [self addSubview:self.topContributorLabel];
+        
+        _topContributorImageView = [[UIImageView alloc] init];
+        _topContributorImageView.translatesAutoresizingMaskIntoConstraints = NO;
+        _topContributorImageView.adjustsImageSizeForAccessibilityContentSizeCategory = YES;
+        [self addSubview:_topContributorImageView];
+        
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
@@ -62,16 +61,21 @@
                                               {
                                                   NSLog(@"Response: %@", dataArray);
                                                   
-                                                  // TODO: Authenticate somehow so i don't get kicked off from making requests :)
                                                   if ([dataArray isKindOfClass:[NSDictionary class]])
                                                   {
-                                                      //info.topContributorName = @"Nope.";
+                                                      info.topContributorName = @"FLETCHER YOU SHOULD FIX THIS";
                                                   }
                                                   else if (dataArray.count > 0)
                                                   {
                                                       NSDictionary *topContributor = [dataArray firstObject];
                                                       info.topContributorName = [topContributor objectForKey:@"login"];
                                                       info.topContributorURL = [topContributor objectForKey:@"html_url"];
+                                                      NSURL *topContributorImageURL = [NSURL URLWithString:[topContributor objectForKey:@"avatar_url"]];
+                                                      // TODO: Is this the best place to do this?
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          self.topContributorLabel.text = info.topContributorName;
+                                                          self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:topContributorImageURL]];
+                                                      });
                                                   }
                                               }
                                           }
@@ -79,6 +83,33 @@
         // Start the task.
         [task resume];
     }
+}
+
+- (void)updateConstraints {
+    [super updateConstraints];
+    NSDictionary *views = NSDictionaryOfVariableBindings(_repositoryLabel, _topContributorImageView, _topContributorLabel);
+    NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_repositoryLabel]-|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_topContributorImageView]-[_topContributorLabel]-|"
+                                                          options:0
+                                                          metrics:nil
+                                                            views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_repositoryLabel]-[_topContributorLabel]-|"
+                                                          options:0
+                                                          metrics:nil
+                                                            views:views];
+    [NSLayoutConstraint activateConstraints:constraints];
+    
+    NSLayoutConstraint *topContributorHeightConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *topContributorWidthConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_topContributorImageView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *topContributorCenterYConstraint = [NSLayoutConstraint constraintWithItem:_topContributorImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_topContributorLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    [NSLayoutConstraint activateConstraints:@[topContributorHeightConstraint, topContributorWidthConstraint, topContributorCenterYConstraint]];
 }
 
 @end

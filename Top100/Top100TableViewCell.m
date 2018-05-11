@@ -14,6 +14,8 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self)
     {
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         _repositoryLabel = [[UILabel alloc] init];
         _repositoryLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _repositoryLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle1];
@@ -55,19 +57,19 @@
     [super updateConstraints];
     NSDictionary *views = NSDictionaryOfVariableBindings(_repositoryLabel, _numStarsLabel, _starImageView);
     NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_repositoryLabel]-|"
-                                                                   options: 0
+                                                                   options:0
                                                                    metrics:nil
                                                                      views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
     constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_starImageView]-[_numStarsLabel]-|"
-                                                          options: 0
+                                                          options:0
                                                           metrics:nil
                                                             views:views];
     [NSLayoutConstraint activateConstraints:constraints];
     
     constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_repositoryLabel]-[_numStarsLabel]-|"
-                                                          options: 0
+                                                          options:0
                                                           metrics:nil
                                                             views:views];
     [NSLayoutConstraint activateConstraints:constraints];

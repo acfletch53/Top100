@@ -12,7 +12,8 @@
 @interface RepositoryDetailView : UIView
 
 @property (nonatomic, weak) RepositoryInfo *info;
-
+@property (nonatomic, strong) UILabel *repositoryLabel;
+@property (nonatomic, strong) UIImageView *topContributorImageView;
 @property (nonatomic, strong) UILabel *topContributorLabel;
 
 @end
