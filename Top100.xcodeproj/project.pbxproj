@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		D387A2DD20A3D5C800EF1091 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D387A2DB20A3D5C800EF1091 /* Info.plist */; };
 		D387A2DE20A3D5DC00EF1091 /* Top100Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D387A2DA20A3D5C800EF1091 /* Top100Tests.m */; };
-		D387A2E120A4F29800EF1091 /* Top100RepositoryInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D387A2E020A4F29800EF1091 /* Top100RepositoryInfo.m */; };
+		D387A2E120A4F29800EF1091 /* RepositoryInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D387A2E020A4F29800EF1091 /* RepositoryInfo.m */; };
+		D387A2E420A54B4500EF1091 /* RepositoryDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = D387A2E320A54B4500EF1091 /* RepositoryDetailView.m */; };
 		D395AF0720A3CAF80010B9BB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D395AF0620A3CAF80010B9BB /* AppDelegate.m */; };
 		D395AF0A20A3CAF80010B9BB /* Top100TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D395AF0920A3CAF80010B9BB /* Top100TableViewController.m */; };
 		D395AF0D20A3CAF80010B9BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D395AF0B20A3CAF80010B9BB /* Main.storyboard */; };
@@ -17,7 +18,6 @@
 		D395AF1220A3CAFA0010B9BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D395AF1020A3CAFA0010B9BB /* LaunchScreen.storyboard */; };
 		D395AF1520A3CAFA0010B9BB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D395AF1420A3CAFA0010B9BB /* main.m */; };
 		D395AF2A20A3CAFA0010B9BB /* Top100UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D395AF2920A3CAFA0010B9BB /* Top100UITests.m */; };
-		D395AF3820A3CEF70010B9BB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D395AF3720A3CEF70010B9BB /* Default-568h@2x.png */; };
 		D395AF3D20A3D0D80010B9BB /* Top100TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D395AF3C20A3D0D80010B9BB /* Top100TableViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -41,8 +41,10 @@
 /* Begin PBXFileReference section */
 		D387A2DA20A3D5C800EF1091 /* Top100Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Top100Tests.m; path = Top100Tests/Top100Tests.m; sourceTree = SOURCE_ROOT; };
 		D387A2DB20A3D5C800EF1091 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Top100Tests/Info.plist; sourceTree = SOURCE_ROOT; };
-		D387A2DF20A4F29800EF1091 /* Top100RepositoryInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Top100RepositoryInfo.h; sourceTree = "<group>"; };
-		D387A2E020A4F29800EF1091 /* Top100RepositoryInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Top100RepositoryInfo.m; sourceTree = "<group>"; };
+		D387A2DF20A4F29800EF1091 /* RepositoryInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepositoryInfo.h; sourceTree = "<group>"; };
+		D387A2E020A4F29800EF1091 /* RepositoryInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RepositoryInfo.m; sourceTree = "<group>"; };
+		D387A2E220A54B4500EF1091 /* RepositoryDetailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepositoryDetailView.h; sourceTree = "<group>"; };
+		D387A2E320A54B4500EF1091 /* RepositoryDetailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RepositoryDetailView.m; sourceTree = "<group>"; };
 		D395AF0220A3CAF80010B9BB /* Top100.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Top100.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D395AF0520A3CAF80010B9BB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D395AF0620A3CAF80010B9BB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -57,7 +59,6 @@
 		D395AF2520A3CAFA0010B9BB /* Top100UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Top100UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D395AF2920A3CAFA0010B9BB /* Top100UITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Top100UITests.m; sourceTree = "<group>"; };
 		D395AF2B20A3CAFA0010B9BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D395AF3720A3CEF70010B9BB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D395AF3B20A3D0D80010B9BB /* Top100TableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Top100TableViewCell.h; sourceTree = "<group>"; };
 		D395AF3C20A3D0D80010B9BB /* Top100TableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Top100TableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,13 +95,11 @@
 				D387A2DA20A3D5C800EF1091 /* Top100Tests.m */,
 			);
 			name = Top100Tests;
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 		D395AEF920A3CAF80010B9BB = {
 			isa = PBXGroup;
 			children = (
-				D395AF3720A3CEF70010B9BB /* Default-568h@2x.png */,
 				D395AF0420A3CAF80010B9BB /* Top100 */,
 				D387A2D920A3D58500EF1091 /* Top100Tests */,
 				D395AF2820A3CAFA0010B9BB /* Top100UITests */,
@@ -127,8 +126,10 @@
 				D395AF0920A3CAF80010B9BB /* Top100TableViewController.m */,
 				D395AF3B20A3D0D80010B9BB /* Top100TableViewCell.h */,
 				D395AF3C20A3D0D80010B9BB /* Top100TableViewCell.m */,
-				D387A2DF20A4F29800EF1091 /* Top100RepositoryInfo.h */,
-				D387A2E020A4F29800EF1091 /* Top100RepositoryInfo.m */,
+				D387A2E220A54B4500EF1091 /* RepositoryDetailView.h */,
+				D387A2E320A54B4500EF1091 /* RepositoryDetailView.m */,
+				D387A2DF20A4F29800EF1091 /* RepositoryInfo.h */,
+				D387A2E020A4F29800EF1091 /* RepositoryInfo.m */,
 				D395AF0B20A3CAF80010B9BB /* Main.storyboard */,
 				D395AF0E20A3CAFA0010B9BB /* Assets.xcassets */,
 				D395AF1020A3CAFA0010B9BB /* LaunchScreen.storyboard */,
@@ -251,7 +252,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D395AF1220A3CAFA0010B9BB /* LaunchScreen.storyboard in Resources */,
-				D395AF3820A3CEF70010B9BB /* Default-568h@2x.png in Resources */,
 				D395AF0F20A3CAFA0010B9BB /* Assets.xcassets in Resources */,
 				D387A2DD20A3D5C800EF1091 /* Info.plist in Resources */,
 				D395AF0D20A3CAF80010B9BB /* Main.storyboard in Resources */,
@@ -280,10 +280,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D395AF0A20A3CAF80010B9BB /* Top100TableViewController.m in Sources */,
-				D387A2E120A4F29800EF1091 /* Top100RepositoryInfo.m in Sources */,
+				D387A2E120A4F29800EF1091 /* RepositoryInfo.m in Sources */,
 				D395AF1520A3CAFA0010B9BB /* main.m in Sources */,
 				D395AF0720A3CAF80010B9BB /* AppDelegate.m in Sources */,
 				D395AF3D20A3D0D80010B9BB /* Top100TableViewCell.m in Sources */,
+				D387A2E420A54B4500EF1091 /* RepositoryDetailView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,97 +20,55 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.estimatedRowHeight = 200;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     // TODO: Only do this if we need to, or if the user asks to refresh the contents.
     // Things change, people star repos, people unstar repos.
-    [self fetchDataForURL:top100URL completionHandler:^(NSData *data,
-                                                        NSURLResponse *response,
-                                                        NSError *error)
-     {
-         // Modified from https://gist.github.com/r3econ/9923319
-         if (error)
-         {
-             NSLog(@"Error: %@", error.localizedDescription);
-         }
-         else
-         {
-             NSError *JSONError = nil;
-             NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                        options:0
-                                                                          error:&JSONError];
-             if (JSONError)
-             {
-                 NSLog(@"Serialization error: %@", JSONError.localizedDescription);
-             }
-             else
-             {
-                 NSLog(@"Response: %@", dictionary);
-                 
-                 self.top100Repositories = [[NSMutableArray alloc] initWithCapacity:100];
-                 NSArray *allItems = [dictionary objectForKey:@"items"];
-                 
-                 // TODO: Make sure i'm only doing 100... i only did this to make everything shut up
-                 for (NSDictionary *items in allItems)
-                 {
-                     Top100RepositoryInfo *info = [[Top100RepositoryInfo alloc] init];
-                     //NSDictionary *items = [allItems objectAtIndex:i];
-                     info.numStars = [[items objectForKey:@"stargazers_count"] intValue];
-                     info.repositoryName = [items objectForKey:@"name"];
-                     info.repositoryURL = [NSURL URLWithString:[items objectForKey:@"html_url"]];
-                     // TODO: Dispatch this asynchronously?
-                     [self getTopContributorInfo:info forURL:[NSString stringWithFormat:@"%@%@", [items objectForKey:@"contributors_url"], @"?per_page=1"]];
-                     [self.top100Repositories addObject:info];
-                 }
-             }
-         }
-     }];
+    NSString *urlString = [top100URL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
-}
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data,
+                                                                                                                                   NSURLResponse *response,
+                                                                                                                                   NSError *error)
+                                  {
+                                      // Modified from https://gist.github.com/r3econ/9923319
+                                      if (error)
+                                      {
+                                          NSLog(@"Error: %@", error.localizedDescription);
+                                      }
+                                      else
+                                      {
+                                          NSError *JSONError = nil;
+                                          
+                                          NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                                          options:0
+                                                                                            error:&JSONError];
+                                          if (JSONError)
+                                          {
+                                              NSLog(@"Serialization error: %@", JSONError.localizedDescription);
+                                          }
+                                          else
+                                          {
+                                              NSLog(@"Response: %@", dataDictionary);
+                                              
+                                              self.top100Repositories = [[NSMutableArray alloc] initWithCapacity:100];
+                                              NSArray *allItems = [dataDictionary objectForKey:@"items"];
 
-- (void)getTopContributorInfo:(Top100RepositoryInfo *)info forURL:(NSString *)url {
-    [self fetchDataForURL:url completionHandler:^(NSData *data,
-                                                  NSURLResponse *response,
-                                                  NSError *error)
-     {
-         // Modified from https://gist.github.com/r3econ/9923319
-         if (error)
-         {
-             NSLog(@"Error: %@", error.localizedDescription);
-         }
-         else
-         {
-             NSError *JSONError = nil;
-
-             NSArray *contributors = [NSJSONSerialization JSONObjectWithData:data
-                                                                     options:0
-                                                                       error:&JSONError];
-             if (JSONError)
-             {
-                 NSLog(@"Serialization error: %@", JSONError.localizedDescription);
-             }
-             else
-             {
-                 NSLog(@"Response: %@", contributors);
-                 
-                 if (contributors.count > 0)
-                 {
-                     NSDictionary *topContributor = [contributors firstObject];
-                     info.topContributorName = [topContributor objectForKey:@"login"];
-                     info.topContributorURL = [topContributor objectForKey:@"html_url"];
-                 }
-             }
-         }
-     }];
-}
-
-- (void)fetchDataForURL:(NSString *)url completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler {
-    NSString *urlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:completionHandler];
+                                              for (NSDictionary *items in allItems)
+                                              {
+                                                  RepositoryInfo *info = [[RepositoryInfo alloc] init];
+                                                  info.numStars = [[items objectForKey:@"stargazers_count"] intValue];
+                                                  info.repositoryName = [items objectForKey:@"name"];
+                                                  info.repositoryURL = [NSURL URLWithString:[items objectForKey:@"html_url"]];
+                                                  info.contributorsURL = [NSString stringWithFormat:@"%@%@", [items objectForKey:@"contributors_url"], @"?per_page=1"];
+                                                  [self.top100Repositories addObject:info];
+                                              }
+                                          }
+                                      }
+                                  }];
     // Start the task.
     [task resume];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Top100RepositoryInfo.h"
+#import "RepositoryInfo.h"
 
 @interface Top100TableViewCell : UITableViewCell
 
-@property (nonatomic, weak) Top100RepositoryInfo *info;
+@property (nonatomic, weak) RepositoryInfo *info;
 @property (nonatomic, strong) UILabel *repositoryLabel;
 @property (nonatomic, strong) UILabel *numStarsLabel;
-@property (nonatomic, strong) UILabel *topContributorLabel;
+@property (nonatomic, strong) UIImageView *starImageView;
 
 @end

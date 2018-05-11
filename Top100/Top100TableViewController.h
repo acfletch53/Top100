@@ -13,6 +13,6 @@
 // and make the default ViewController inherit from UITableViewController
 @interface Top100TableViewController : UITableViewController
 
-@property NSMutableArray<Top100RepositoryInfo *> *top100Repositories;
+@property NSMutableArray<RepositoryInfo *> *top100Repositories;
 
 @end
