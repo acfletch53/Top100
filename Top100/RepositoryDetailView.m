@@ -53,13 +53,11 @@
         _topContributorImageView.translatesAutoresizingMaskIntoConstraints = NO;
         _topContributorImageView.adjustsImageSizeForAccessibilityContentSizeCategory = YES;
         [self addSubview:_topContributorImageView];
-        
-        [self setNeedsUpdateConstraints];
     }
     return self;
 }
 
-- (void)setInfo:(RepositoryInfo *)info completionHandler:(void(^)(void))completionHandler {
+- (void)setInfo:(RepositoryInfo *)info {
     if (info != nil)
     {
         _info = info;
@@ -72,7 +70,6 @@
             self.topContributorContributionsLabel.text = [NSString stringWithFormat:@"%d Contributions", info.numContributions];
             self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:info.topContributorImageURL]];
             [self setNeedsLayout];
-            completionHandler();
         }
         else
         {
@@ -123,7 +120,6 @@
                                                           self.topContributorContributionsLabel.text = [NSString stringWithFormat:@"%d Contributions", info.numContributions];
                                                           self.topContributorImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:info.topContributorImageURL]];
                                                           [self setNeedsLayout];
-                                                          completionHandler();
                                                       });
                                                   }
                                               }

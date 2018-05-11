@@ -54,7 +54,7 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 100;
+    return _top100Repositories.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -80,14 +80,10 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     RepositoryDetailView *detailView = [[RepositoryDetailView alloc] init];
     if (indexPath.row < [self.top100Repositories count])
     {
+        // Lets just... set this guy to an activity indicator until we are ready.
         [detailViewController setView:detailView];
+        [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]];
         [[self navigationController] pushViewController:detailViewController animated:YES];
-        [detailView setHidden:YES];
-        [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]
-          completionHandler:^ {
-              //[[self navigationController] pushViewController:detailViewController animated:YES];
-              [detailView setHidden:NO];
-          }];
     }
 }
 
