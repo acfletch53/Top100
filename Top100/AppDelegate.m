@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  Top100StarredGithubRepositories
+//  Top100
 //
 //  Created by Andrea Fletcher on 5/9/18.
 //  Copyright © 2018 Andrea Fletcher. All rights reserved.

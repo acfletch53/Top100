@@ -1,6 +1,6 @@
 //
-//  Top100StarredGithubRepositoriesUITests.m
-//  Top100StarredGithubRepositoriesUITests
+//  Top100UITests.m
+//  Top100UITests
 //
 //  Created by Andrea Fletcher on 5/9/18.
 //  Copyright © 2018 Andrea Fletcher. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface Top100StarredGithubRepositoriesUITests : XCTestCase
+@interface Top100UITests : XCTestCase
 
 @end
 
-@implementation Top100StarredGithubRepositoriesUITests
+@implementation Top100UITests
 
 - (void)setUp {
     [super setUp];
