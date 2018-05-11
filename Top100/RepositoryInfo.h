@@ -17,4 +17,6 @@
 @property int numContributions;
 @property NSURL *topContributorImageURL;
 
+- (void)loadTopContributorInfoWithCompletionHandler:(void(^)(void))completionHandler;
+
 @end

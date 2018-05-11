@@ -80,18 +80,24 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     RepositoryDetailView *detailView = [[RepositoryDetailView alloc] init];
     if (indexPath.row < [self.top100Repositories count])
     {
+        RepositoryInfo *info = [self.top100Repositories objectAtIndex:indexPath.row];
         [detailViewController setView:detailView];
-        [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]];
-        [[self navigationController] pushViewController:detailViewController animated:YES];
+        [info loadTopContributorInfoWithCompletionHandler:^ {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [detailView setInfo:[self.top100Repositories objectAtIndex:indexPath.row]];
+                [[self navigationController] pushViewController:detailViewController animated:YES];
+            });
+        }];
     }
 }
 
 - (void)getRepositoryDataWithCompletionHandler:(void(^)(void))completionHandler {
     NSString *urlString = [top100URL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data,
-                                                                                                                                   NSURLResponse *response,
-                                                                                                                                   NSError *error)
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString]
+                                                             completionHandler:^(NSData *data,
+                                                                                 NSURLResponse *response,
+                                                                                 NSError *error)
                                   {
                                       // Modified from https://gist.github.com/r3econ/9923319
                                       if (error)
@@ -121,7 +127,8 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
                                                   RepositoryInfo *info = [[RepositoryInfo alloc] init];
                                                   info.numStars = [[items objectForKey:@"stargazers_count"] intValue];
                                                   info.repositoryName = [items objectForKey:@"name"];
-                                                  info.contributorsURLString = [NSString stringWithFormat:@"%@%@", [items objectForKey:@"contributors_url"], @"?per_page=1"];
+                                                  info.contributorsURLString = [NSString stringWithFormat:@"%@%@",
+                                                                                [items objectForKey:@"contributors_url"], @"?per_page=1"];
                                                   [self.top100Repositories addObject:info];
                                               }
                                               completionHandler();
