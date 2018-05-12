@@ -41,6 +41,9 @@
         _starImageView.adjustsImageSizeForAccessibilityContentSizeCategory = YES;
         [self.contentView addSubview:_starImageView];
         
+        // I tried using an activityIndicatorView for when we didn't have the information yet, but
+        // since everything for the main tableView loads almost all at once, it didn't look very good.
+        
         [self setNeedsUpdateConstraints];
     }
     return self;

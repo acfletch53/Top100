@@ -35,12 +35,20 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     // Styling
     self.tableView.backgroundColor = [UIColor blackColor];
     
+    // Hide until it's ready so at least we don't have to look at a pinstriped screen.
+    // A much better fix would be to have this whole thing be a UIViewController, and have a single
+    // activity indicator view in the center of the screen until the tableView data is ready,
+    // then display it.
+    self.tableView.hidden = YES;
+    
     if (_top100Repositories == nil)
     {
         [self getRepositoryDataWithCompletionHandler:^ {
             // reload the tableView
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
+                // Would probably look less horrible if it faded in.
+                self.tableView.hidden = NO;
             });
         }];
     }
@@ -51,7 +59,7 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _top100Repositories.count;
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -157,10 +165,12 @@ static NSString *top100URL = @"https://api.github.com/search/repositories?q=star
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Reloading Data"];
 
     [self getRepositoryDataWithCompletionHandler:^{
-        // reload the tableView
-        [self.tableView reloadData];
-        // to end the refresh animation
-        [refresh endRefreshing];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // reload the tableView
+            [self.tableView reloadData];
+            // to end the refresh animation
+            [refresh endRefreshing];
+        });
     }];
 }
 
