@@ -48,6 +48,8 @@
                                                   {
                                                       // This means we got an error message regarding the list of contributors
                                                       // being too long to get with this API call.
+                                                      // I got this a lot at the beginning when i was still hitting the rate limits,
+                                                      // and haven't seen it since, but just in case...
                                                       self.topContributorName = @"This repository is so popular, everyone is a top contributor!";
                                                       self.numContributions = INT_MAX;
                                                       self.topContributorImageURL = [NSURL URLWithString:@"https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/02/13/10/oprah-winfrey.jpg"];

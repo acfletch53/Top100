@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Top100TableViewCell.h"
+#import "RepositoryInfo.h"
 
 @interface Top100TableViewController : UITableViewController
 

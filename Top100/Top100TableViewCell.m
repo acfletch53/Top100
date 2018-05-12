@@ -14,6 +14,7 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self)
     {
+        // Styling
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.backgroundColor = [UIColor blackColor];
         
@@ -21,7 +22,9 @@
         _repositoryLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _repositoryLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle1];
         _repositoryLabel.textColor = [UIColor whiteColor];
+        // For AX large text support
         _repositoryLabel.adjustsFontForContentSizeCategory = YES;
+        // Wrap to multiple lines
         _repositoryLabel.numberOfLines = 0;
         [self.contentView addSubview:_repositoryLabel];
         
@@ -32,6 +35,7 @@
         _numStarsLabel.adjustsFontForContentSizeCategory = YES;
         [self.contentView addSubview:_numStarsLabel];
         
+        // This guy is a scalable SVG, so it can grow with the users text size
         _starImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"small-star"]];
         _starImageView.translatesAutoresizingMaskIntoConstraints = NO;
         _starImageView.adjustsImageSizeForAccessibilityContentSizeCategory = YES;
@@ -47,11 +51,15 @@
     {
         _repositoryLabel.text = info.repositoryName;
         _numStarsLabel.text = [@(info.numStars) stringValue];
+        _numStarsLabel.accessibilityLabel = [NSString stringWithFormat:@"Starred %d times", info.numStars];
     }
 }
 
 - (void)updateConstraints {
     [super updateConstraints];
+    // I feel much more comfortable doing manual layouts that using storyboards.
+    // Also, conveniently, my computer freezes for ten seconds every time I open up a storyboard.
+    // I avoid using strict width and height values so these can adapt to the users preferredContentSizeCategory.
     NSDictionary *views = NSDictionaryOfVariableBindings(_repositoryLabel, _numStarsLabel, _starImageView);
     NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_repositoryLabel]-|"
                                                                    options:0

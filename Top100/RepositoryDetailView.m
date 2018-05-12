@@ -14,6 +14,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        // Styling
         self.backgroundColor = [UIColor blackColor];
         
         _repositoryLabel = [[UILabel alloc] init];
@@ -31,6 +32,8 @@
         _topContributorLabel.text = @"Top Contributor";
         _topContributorLabel.textColor = [UIColor whiteColor];
         _topContributorLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        // Allow these to shrink a bit if it means they'll fit on the screen.
+        // Looks way better at large text sizes, and still very readable.
         _topContributorLabel.adjustsFontForContentSizeCategory = YES;
         _topContributorLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.topContributorLabel];
